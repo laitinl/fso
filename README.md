@@ -1,3 +1,3 @@
-# Full Stack Open - CS-E4675
+# Full Stack Web Development - CS-E4675
 
 

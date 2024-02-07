@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
+import './index.css'
 
 const Filter = ({ value, handleChange }) => {
   return (
@@ -50,11 +51,24 @@ const Persons = ({ list, handleDelete }) => {
   )
 }
 
+const Notification = ({ message, className }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className={className}>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filt, setFilter] = useState('')
+  const [notification, setNotification] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     console.log('effect activated')
@@ -93,9 +107,15 @@ const App = () => {
         personService
           .update(id, newPerson)
           .then(returnedPerson => {
+            setNotification(`Updated the number of ${newName}`)
+            setTimeout(() => setNotification(null), 5000)
             setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
             setNewName('')
             setNewNumber('')
+          })
+          .catch(error => {
+            setErrorMessage(`Updating the number of ${newName} failed`)
+            setTimeout(() => setErrorMessage(null), 5000)
           })
       }
     } else {
@@ -106,9 +126,15 @@ const App = () => {
       personService
         .create(newPerson)
         .then(returnedPerson => {
+          setNotification(`Added ${newName}`)
+          setTimeout(() => setNotification(null), 5000)
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+        })
+        .catch(error => {
+          setErrorMessage('Adding new contact failed')
+          setTimeout(() => setErrorMessage(null), 5000)
         })
     }
   }
@@ -123,7 +149,13 @@ const App = () => {
       personService
         .remove(id)
         .then(deletedPerson => {
+          setNotification(`Deleted ${deletedPerson.name}`)
+          setTimeout(() => setNotification(null), 5000)
           setPersons(persons.filter(person => person.id !== deletedPerson.id))
+        })
+        .catch(error => {
+          setErrorMessage(`Information of ${name} has already been removed from server`)
+          setTimeout(() => setErrorMessage(null), 5000)
         })
     }
   }
@@ -133,6 +165,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} className={'notification'} />
+      <Notification message={errorMessage} className={'error'} />
       <Filter value={filt} handleChange={handleFilterChange} />
       <h3>add a new</h3>
       <PersonForm

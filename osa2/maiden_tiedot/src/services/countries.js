@@ -11,8 +11,8 @@ const getAll = () => {
 }
 
 const getWeather = (country) => {
-    const [lat, lng] = country.latlng
-    const request = axios.get(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lng}&exclude=minutely,hourly,daily,alerts&units=metric&appid=${api_key}`)
+    const name = country.name.common
+    const request = axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${name}&units=metric&appid=${api_key}`)
     return request.then(response => {
         console.log('Weather data request fulfilled')
         return response.data

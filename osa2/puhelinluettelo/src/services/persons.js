@@ -23,9 +23,6 @@ const remove = (id) => {
         console.log('Delete request fulfilled')
         return response.data
     })
-        .catch(error => {
-            console.error(error)
-        })
 }
 
 const update = (id, newObject) => {

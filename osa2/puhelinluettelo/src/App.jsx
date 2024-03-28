@@ -114,7 +114,7 @@ const App = () => {
             setNewNumber('')
           })
           .catch(error => {
-            setErrorMessage(`Updating the number of ${newName} failed`)
+            setErrorMessage(error.response.data.error)
             setTimeout(() => setErrorMessage(null), 5000)
           })
       }
@@ -133,7 +133,7 @@ const App = () => {
           setNewNumber('')
         })
         .catch(error => {
-          setErrorMessage('Adding new contact failed')
+          setErrorMessage(error.response.data.error)
           setTimeout(() => setErrorMessage(null), 5000)
         })
     }
